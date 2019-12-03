@@ -1,5 +1,6 @@
 class Render {
     node;
+    name;
     _FindPrefix(str, data) {
         let a = [];
         let b = [];
@@ -31,6 +32,7 @@ class Render {
 
     setNode(node) {
         this.node = document.querySelectorAll(node);
+        this.name = node;
         this._check();
         return this;
     }
@@ -46,6 +48,7 @@ class Render {
     }
 
     if(status) {
+        this.setNode(this.name);
         for (let i of this.node) {
             if (status) {
                 i.style.removeProperty("display")
@@ -59,11 +62,22 @@ class Render {
     for(data) {
         for (let i of this.node) {
             let dname = i.attributes.getNamedItem("render-for").value;
+            if (i.style.display === "none") {
+                i.style.removeProperty("display");
+                i.attributes.removeNamedItem("render-for");
+            }
+            let n = i.nextSibling;
+            while (n) {
+                let nn = n;
+                n = n.nextSibling;
+                nn.remove();
+            }
             let node = i.outerHTML;
             for (let j of data[dname]) {
+                data[dname] = data[dname].reverse();
                 i.after(this._parseDom(this._FindPrefix(node, j)));
             }
-            i.style.display="none";
+            i.style.display = "none";
         }
         return this;
     }
@@ -77,7 +91,7 @@ class Render {
 }
 
 function NewRender(node) {
-    if (node){
+    if (node) {
         return new Render().setNode(node);
     }
     return new Render();
