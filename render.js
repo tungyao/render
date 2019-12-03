@@ -24,22 +24,37 @@ class Render {
     }
 
     _parseDom(arg) {
-
         let objE = document.createElement("div");
-
         objE.innerHTML = arg;
-
         return objE.firstChild;
 
     };
 
     setNode(node) {
         this.node = document.querySelectorAll(node);
+        this._check();
         return this;
     }
 
-    if() {
-        
+    _check() {
+        for (let i of this.node) {
+            if (i.attributes.getNamedItem("render-if") !== null) {
+                if (i.attributes.getNamedItem("render-if").value === "false") {
+                    i.style.display = "none";
+                }
+            }
+        }
+    }
+
+    if(status) {
+        for (let i of this.node) {
+            if (status) {
+                i.style.removeProperty("display")
+            } else {
+                i.style.display = "none";
+            }
+        }
+        return this;
     }
 
     for(data) {
@@ -49,14 +64,16 @@ class Render {
             for (let j of data[dname]) {
                 i.after(this._parseDom(this._FindPrefix(node, j)));
             }
-            i.remove();
+            i.style.display="none";
         }
+        return this;
     }
 
     append(node) {
         for (let i of this.node) {
             i.innerHTML = node
         }
+        return this;
     }
 }
 
