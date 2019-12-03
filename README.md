@@ -1,5 +1,5 @@
 # render
-前端快速渲染模板
+前端快速渲染引擎
 ```html
 <div class='father' render-for="data">
 {item.name} {item.age}
