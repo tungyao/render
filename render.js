@@ -1,6 +1,5 @@
 class Render {
     node;
-
     _FindPrefix(str, data) {
         let a = [];
         let b = [];
@@ -77,6 +76,9 @@ class Render {
     }
 }
 
-function NewRender() {
+function NewRender(node) {
+    if (node){
+        return new Render().setNode(node);
+    }
     return new Render();
 }
