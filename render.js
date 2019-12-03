@@ -73,8 +73,8 @@ class Render {
                 nn.remove();
             }
             let node = i.outerHTML;
+            data[dname] = data[dname].reverse();
             for (let j of data[dname]) {
-                data[dname] = data[dname].reverse();
                 i.after(this._parseDom(this._FindPrefix(node, j)));
             }
             i.style.display = "none";
