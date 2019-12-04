@@ -1,24 +1,20 @@
 class Render {
     node;
     name;
+
     _FindPrefix(str, data) {
-        let a = [];
-        let b = [];
+        let a = 0;
         let c = str;
         for (let i in str) {
             if (str[i] === "{") {
-                a.push(i);
+                a = i;
             }
             if (str[i] === "}") {
-                b.push(i);
+                let ns = str.substr(a, i - a + 1);
+                let nss = str.substr(a, i - a);
+                let t = data[nss.split(".")[1]];
+                c = c.replace(ns, t);
             }
-        }
-
-        for (let i in a) {
-            let ns = str.substr(a[i], b[i] - a[i] + 1);
-            let nss = str.substr(a[i], b[i] - a[i]);
-            let t = data[nss.split(".")[1]];
-            c = c.replace(new RegExp(ns, 'g'), t);
         }
         return c
     }
@@ -27,7 +23,6 @@ class Render {
         let objE = document.createElement("div");
         objE.innerHTML = arg;
         return objE.firstChild;
-
     };
 
     setNode(node) {
