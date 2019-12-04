@@ -4,31 +4,43 @@ class Render {
     status;
     _prefix;
     _node;
+    _pnode;
+
     constructor() {
         this.status = 0;
-        this._prefix =0;
+        this._prefix = 0;
         this._node = document.createElement("div");
     }
-    _findPrefix(str, data) {
-        let a = 0;
-        let c = str;
-        for (let i in str) {
-            if (str[i] === "{") {
-                a = i;
-            }
-            if (str[i] === "}") {
-                let ns = str.substr(a, i - a + 1);
-                let nss = str.substr(a, i - a);
-                let t = data[nss.split(".")[1]];
-                c = c.replace(ns, t);
+
+    _findPrefix(data) {
+        let c = this._pnode;
+        for (let i of c.childNodes) {
+            if (i.nodeType===3) {
+                let a = 0;
+                let html = i.nodeValue;
+                for (let j in html) {
+                    console.log(html[j]);
+                    if (html[j] === "{") {
+                        a = j;
+                        console.log(a,1);
+                    }
+                    if (html[j] === "}") {
+                        console.log(j,2);
+                        console.log(html);
+                        let ns = html.substr(a, j - a + 1);
+                        let nss = html.substr(a, j - a);
+                        let t = data[nss.split(".")[1]];
+                        html = html.replace(ns,t);
+                    }
+                }
+                i.nodeValue = html;
             }
         }
         return c
     }
 
     _parseDom(arg) {
-        this._node.innerHTML = arg;
-        return this._node.firstChild;
+        return arg;
     };
 
     setNode(node) {
@@ -76,12 +88,13 @@ class Render {
                 n = n.nextSibling;
                 nn.remove();
             }
-            if ( node.attributes.getNamedItem("status")&&this.status !== 0) {
+            if (node.attributes.getNamedItem("status") && this.status !== 0) {
                 node.attributes.removeNamedItem("status");
             }
             data[dname].reverse();
             for (let j of data[dname]) {
-                i.after(this._parseDom(this._findPrefix(node.outerHTML, j)));
+                this._pnode = node.cloneNode(true);
+                i.after(this._findPrefix(j));
             }
             i.style.display = "none";
             i.attributes.setNamedItem(document.createAttribute("status"));
@@ -89,6 +102,7 @@ class Render {
         this.status += 1;
         return this;
     }
+
     append(node) {
         for (let i of this.node) {
             i.innerHTML = node
