@@ -1,6 +1,11 @@
 class Render {
     node;
     name;
+    status;
+
+    constructor() {
+        this.status = 0;
+    }
 
     _FindPrefix(str, data) {
         let a = 0;
@@ -46,7 +51,9 @@ class Render {
         this.setNode(this.name);
         for (let i of this.node) {
             if (status) {
-                i.style.removeProperty("display")
+                if (!i.attributes.getNamedItem("status")) {
+                    i.style.removeProperty("display")
+                }
             } else {
                 i.style.display = "none";
             }
@@ -56,24 +63,29 @@ class Render {
 
     for(data) {
         for (let i of this.node) {
+            let node = i;
             let dname = i.attributes.getNamedItem("render-for").value;
-            if (i.style.display === "none") {
-                i.style.removeProperty("display");
-                i.attributes.removeNamedItem("render-for");
+            if (node.style.display === "none") {
+                node.style.removeProperty("display");
+                node.attributes.removeNamedItem("render-for");
             }
-            let n = i.nextSibling;
+            let n = node.nextSibling;
             while (n) {
                 let nn = n;
                 n = n.nextSibling;
                 nn.remove();
             }
-            let node = i.outerHTML;
+            if (this.status !== 0) {
+                node.attributes.removeNamedItem("status");
+            }
             data[dname] = data[dname].reverse();
             for (let j of data[dname]) {
-                i.after(this._parseDom(this._FindPrefix(node, j)));
+                i.after(this._parseDom(this._FindPrefix(node.outerHTML, j)));
             }
             i.style.display = "none";
+            i.attributes.setNamedItem(document.createAttribute("status"));
         }
+        this.status += 1;
         return this;
     }
 
