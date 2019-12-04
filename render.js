@@ -2,12 +2,14 @@ class Render {
     node;
     name;
     status;
-
+    _prefix;
+    _node;
     constructor() {
         this.status = 0;
+        this._prefix =0;
+        this._node = document.createElement("div");
     }
-
-    _FindPrefix(str, data) {
+    _findPrefix(str, data) {
         let a = 0;
         let c = str;
         for (let i in str) {
@@ -25,9 +27,8 @@ class Render {
     }
 
     _parseDom(arg) {
-        let objE = document.createElement("div");
-        objE.innerHTML = arg;
-        return objE.firstChild;
+        this._node.innerHTML = arg;
+        return this._node.firstChild;
     };
 
     setNode(node) {
@@ -80,7 +81,7 @@ class Render {
             }
             data[dname] = data[dname].reverse();
             for (let j of data[dname]) {
-                i.after(this._parseDom(this._FindPrefix(node.outerHTML, j)));
+                i.after(this._parseDom(this._findPrefix(node.outerHTML, j)));
             }
             i.style.display = "none";
             i.attributes.setNamedItem(document.createAttribute("status"));
@@ -88,7 +89,6 @@ class Render {
         this.status += 1;
         return this;
     }
-
     append(node) {
         for (let i of this.node) {
             i.innerHTML = node
