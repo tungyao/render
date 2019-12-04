@@ -68,7 +68,7 @@ class Render {
             let dname = i.attributes.getNamedItem("render-for").value;
             if (node.style.display === "none") {
                 node.style.removeProperty("display");
-                node.attributes.removeNamedItem("render-for");
+                // node.attributes.removeNamedItem("render-for");
             }
             let n = node.nextSibling;
             while (n) {
@@ -76,10 +76,10 @@ class Render {
                 n = n.nextSibling;
                 nn.remove();
             }
-            if (this.status !== 0) {
+            if ( node.attributes.getNamedItem("status")&&this.status !== 0) {
                 node.attributes.removeNamedItem("status");
             }
-            data[dname] = data[dname].reverse();
+            data[dname].reverse();
             for (let j of data[dname]) {
                 i.after(this._parseDom(this._findPrefix(node.outerHTML, j)));
             }
