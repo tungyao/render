@@ -19,21 +19,16 @@ class Render {
                 let a = 0;
                 let html = i.nodeValue;
                 for (let j in html) {
-                    console.log(html[j]);
                     if (html[j] === "{") {
                         a = j;
-                        console.log(a,1);
                     }
                     if (html[j] === "}") {
-                        console.log(j,2);
-                        console.log(html);
                         let ns = html.substr(a, j - a + 1);
                         let nss = html.substr(a, j - a);
                         let t = data[nss.split(".")[1]];
-                        html = html.replace(ns,t);
+                        i.nodeValue = i.nodeValue.replace(ns,t);
                     }
                 }
-                i.nodeValue = html;
             }
         }
         return c
@@ -91,7 +86,6 @@ class Render {
             if (node.attributes.getNamedItem("status") && this.status !== 0) {
                 node.attributes.removeNamedItem("status");
             }
-            data[dname].reverse();
             for (let j of data[dname]) {
                 this._pnode = node.cloneNode(true);
                 i.after(this._findPrefix(j));
