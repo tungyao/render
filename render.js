@@ -12,30 +12,69 @@ class Render {
         this._node = document.createElement("div");
     }
 
-    _findPrefix(data) {
-        let c = this._pnode;
+    _findPrefix(node, data) {
+        let c = node;
+        this._findAttr(c, data);
         for (let i of c.childNodes) {
-            if (i.nodeType===3) {
-                let a = 0;
-                let html = i.nodeValue;
-                for (let j in html) {
-                    if (html[j] === "{") {
-                        a = j;
-                    }
-                    if (html[j] === "}") {
-                        let ns = html.substr(a, j - a + 1);
-                        let nss = html.substr(a, j - a);
-                        let t = data[nss.split(".")[1]];
-                        i.nodeValue = i.nodeValue.replace(ns,t);
-                    }
-                }
+            this._findAttr(i,data);
+            if (i.nodeType === 3) {
+                i = this._parseDom(i, data)
+            }
+            if (i.nodeType === 1) {
+                this._findChild(i.childNodes, data)
             }
         }
         return c
     }
 
-    _parseDom(arg) {
-        return arg;
+    _findAttr(node, data) {
+        if (typeof node.attributes === "undefined") {
+            return;
+        }
+        for (let i of node.attributes) {
+            this._parseDom(i, data)
+        }
+    }
+
+    _findChild(node, data) {
+        this._findAttr(node,data);
+        if (typeof node.length === "undefined") {
+            if (typeof node === "object" && node.nodeType === 1) {
+                this._parseDom(node, data);
+            }
+            return;
+        }
+        for (let i of node) {
+            if (i.nodeType === 3) {
+                this._parseDom(i, data)
+            } else if (i.nodeType === 1) {
+                this._findChild(i, data)
+            }
+        }
+    }
+
+    _parseDom(node, data) {
+        let html = node.nodeValue;
+        if (node.nodeValue === null) {
+            html = node.innerHTML;
+        }
+        let a = 0;
+        for (let j in html) {
+            if (html[j] === "{") {
+                a = j;
+            }
+            if (html[j] === "}") {
+                let ns = html.substr(a, j - a + 1);
+                let nss = html.substr(a, j - a);
+                let t = data[nss.split(".")[1]];
+                if (node.nodeValue === null) {
+                    node.innerHTML = node.innerHTML.replace(ns, t);
+                } else {
+                    node.nodeValue = node.nodeValue.replace(ns, t);
+                }
+            }
+        }
+        return node;
     };
 
     setNode(node) {
@@ -88,7 +127,7 @@ class Render {
             }
             for (let j of data[dname]) {
                 this._pnode = node.cloneNode(true);
-                i.after(this._findPrefix(j));
+                i.after(this._findPrefix(this._pnode, j));
             }
             i.style.display = "none";
             i.attributes.setNamedItem(document.createAttribute("status"));
