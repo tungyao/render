@@ -4,7 +4,6 @@ class Render {
     status;
     _prefix;
     _node;
-    _pnode;
 
     constructor() {
         this.status = 0;
@@ -16,7 +15,7 @@ class Render {
         let c = node;
         this._findAttr(c, data);
         for (let i of c.childNodes) {
-            this._findAttr(i,data);
+            this._findAttr(i, data);
             if (i.nodeType === 3) {
                 i = this._parseDom(i, data)
             }
@@ -37,7 +36,7 @@ class Render {
     }
 
     _findChild(node, data) {
-        this._findAttr(node,data);
+        this._findAttr(node, data);
         if (typeof node.length === "undefined") {
             if (typeof node === "object" && node.nodeType === 1) {
                 this._parseDom(node, data);
@@ -108,29 +107,46 @@ class Render {
         return this;
     }
 
+    _same(nodes, data, type) {
+        let node = nodes;
+        let dname;
+        if (type === 0) {
+            dname = nodes.attributes.getNamedItem("render-for").value;
+        } else if (type === 1) {
+            dname = nodes.attributes.getNamedItem("render-obj").value;
+        }
+        if (node.style.display === "none") {
+            node.style.removeProperty("display");
+            // node.attributes.removeNamedItem("render-for");
+        }
+        let n = node.nextSibling;
+        while (n) {
+            let nn = n;
+            n = n.nextSibling;
+            nn.remove();
+        }
+        if (node.attributes.getNamedItem("status") && this.status !== 0) {
+            node.attributes.removeNamedItem("status");
+        }
+        if (type === 0) {
+            for (let j of data[dname]) {
+                nodes.after(this._findPrefix(node.cloneNode(true), j));
+            }
+        } else if (type === 1) {
+            nodes.after(this._findPrefix(node.cloneNode(true), data[dname]));
+        }
+
+        nodes.style.display = "none";
+        nodes.attributes.setNamedItem(document.createAttribute("status"));
+    }
+
+    obj(data) {
+        this._same(this.node[0], data, 1)
+    }
+
     for(data) {
         for (let i of this.node) {
-            let node = i;
-            let dname = i.attributes.getNamedItem("render-for").value;
-            if (node.style.display === "none") {
-                node.style.removeProperty("display");
-                // node.attributes.removeNamedItem("render-for");
-            }
-            let n = node.nextSibling;
-            while (n) {
-                let nn = n;
-                n = n.nextSibling;
-                nn.remove();
-            }
-            if (node.attributes.getNamedItem("status") && this.status !== 0) {
-                node.attributes.removeNamedItem("status");
-            }
-            for (let j of data[dname]) {
-                this._pnode = node.cloneNode(true);
-                i.after(this._findPrefix(this._pnode, j));
-            }
-            i.style.display = "none";
-            i.attributes.setNamedItem(document.createAttribute("status"));
+            this._same(i, data, 0);
         }
         this.status += 1;
         return this;

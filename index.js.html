@@ -13,15 +13,12 @@
 <ul>
     <li class="father" render-for="data" onclick="click({item.age})">
         {item.name}=>{item.age}
-        <div onclick="click({item.age})">
-            {item.name}
-            <div onclick="click({item.age})">{item.name}=>>>{item.age}</div>
-        </div>
     </li>
 </ul>
-<!--<div class="two" render-if="false">-->
-<!--    <h1>HELLO</h1>-->
-<!--</div>-->
+<div class="two" render-obj="data">
+    <h1>{item.age}</h1>
+    <h1>{item.name}</h1>
+</div>
 </body>
 <script src="test.js"></script>
 

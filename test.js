@@ -1,5 +1,5 @@
 let arr = [];
-for (let key = 0; key < 3; key++) {
+for (let key = 0; key < 1000; key++) {
     arr.push({name: "a", age: key})
 }
 let nodea = NewRender().setNode(".father").for({data: arr});
@@ -20,7 +20,7 @@ let nodea = NewRender().setNode(".father").for({data: arr});
 // }, 5000);
 //
 //
-// let node = NewRender().setNode(".two").if(false);
+let node = NewRender().setNode(".two").obj({data: {name: "aa", age: "bb"}});
 // setTimeout(function () {
 //     node.if(true);
 // }, 1000);
