@@ -87,7 +87,7 @@ class Render {
         if (typeof object === 'object') {
             for (let i in object) {
                 if (typeof object[i] === 'object') {
-                    return fff(object[i], key);
+                    return this._fff(object[i], key);
                 }
                 if (key === i) {
                     return object[key];
