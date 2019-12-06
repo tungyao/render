@@ -65,16 +65,37 @@ class Render {
             if (html[j] === "}") {
                 let ns = html.substr(a, j - a + 1);
                 let nss = html.substr(a, j - a);
-                let t = data[nss.split(".")[1]];
-                if (node.nodeValue === null) {
-                    node.innerHTML = node.innerHTML.replace(ns, t);
+                let d = nss.split(".");
+                let key;
+                if (d.length > 2) {
+                    key = this._fff(data[d[1]], d.pop());
                 } else {
-                    node.nodeValue = node.nodeValue.replace(ns, t);
+                    key = data[d[1]];
+                }
+                let value = html.replace(ns, key);
+                if (node.nodeValue === null) {
+                    node.innerHTML = value;
+                } else {
+                    node.nodeValue = value;
                 }
             }
         }
         return node;
     };
+
+    _fff(object, key) {
+        if (typeof object === 'object') {
+            for (let i in object) {
+                if (typeof object[i] === 'object') {
+                    return fff(object[i], key);
+                }
+                if (key === i) {
+                    return object[key];
+                }
+            }
+        }
+        return object[key];
+    }
 
     setNode(node) {
         this.node = document.querySelectorAll(node);
@@ -135,7 +156,6 @@ class Render {
         } else if (type === 1) {
             nodes.after(this._findPrefix(node.cloneNode(true), data[dname]));
         }
-
         nodes.style.display = "none";
         nodes.attributes.setNamedItem(document.createAttribute("status"));
     }
