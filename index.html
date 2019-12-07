@@ -10,13 +10,24 @@
 </head>
 <body>
 <div render-obj="data" class="root">
-    <h1>{item.person.name}</h1>
-    <h4>{item.person.data.names}</h4>
-    <h3>{item.person.age}</h3>
-    <h1>{item.other.name}</h1>
+    <div>
+
+        <div>
+            <div>
+                <div oncancel="{item.person.name}">
+                    <h1>{item.person.name}</h1>
+                    <h4>{item.person.data.names}</h4>
+                    <h3>{item.person.age}</h3>
+                    <h1>{item.other.name}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script>
-    NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
+    OldRender().setNode(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
+    // NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
 </script>
 </body>
 </html>
