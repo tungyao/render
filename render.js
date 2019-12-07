@@ -101,6 +101,9 @@ class Render {
 
     setNode(node) {
         this.node = document.querySelectorAll(node);
+        if (typeof this.node !== "object") {
+            this.node = document.getElementsByClassName(node);
+        }
         this.name = node;
         this._check();
         return this;
@@ -274,6 +277,9 @@ oRender.prototype = {
 
     setNode: function (node) {
         this.node = document.querySelectorAll(node);
+        if (typeof this.node !== "object") {
+            this.node = document.getElementsByClassName(node);
+        }
         this.name = node;
         this._check();
         return this;
@@ -357,6 +363,7 @@ oRender.prototype = {
 var OldRender = function (node) {
     return new oRender().setNode(node);
 };
+
 function NewRender(node) {
     return new Render().setNode(node);
 }
