@@ -14,6 +14,7 @@
     <h1>{item.name}</h1>
 </div>
 ```
+### 老版本浏览器 请使用 `OldRender` 代替
 ```javascript
 // 渲染数组用这个
 NewRender(".array").for({data:[{name:"a",age:"b"},{name:"c",age:"d"}]})

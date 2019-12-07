@@ -6,7 +6,8 @@ class Render {
     _prefix;
     _node;
 
-    constructor() {
+    constructor(node) {
+        this.setNode(node);
         this.status = 0;
         this._prefix = 0;
         this._node = document.createElement("div");
