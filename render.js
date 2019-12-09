@@ -1,12 +1,9 @@
 // 新版浏览器可以使用
 class Render {
-    node;
-    name;
-    status;
-    _prefix;
-    _node;
-
     constructor(node) {
+        this.node = null;
+        this.name= null;
+        this.status= null;
         this.setNode(node);
         this.status = 0;
         this._prefix = 0;
@@ -373,9 +370,9 @@ oRender.prototype = {
         return this;
     }
 };
-window.OldRender =function () {
+function OldRender (){
     return  new oRender();
-};
+}
 function NewRender(node) {
     return new Render().setNode(node);
 }
