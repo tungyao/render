@@ -9,16 +9,14 @@
     <script src="render.js"></script>
 </head>
 <body>
-<div render-for="data" class="root">
+<div render-obj="data" class="root">
     <div>
 
         <div>
             <div>
                 <div oncancel="{item.name}">
-                    <h1>{item.name}</h1>
-                    <h4>{item.name}</h4>
-                    <h3>{item.age}</h3>
-                    <h1>{item.name}</h1>
+                    {item.name}
+                    {item.age}
                 </div>
             </div>
         </div>
@@ -29,7 +27,7 @@
 
 <script>
 
-    // OldRender().setNode(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
+    OldRender().setNode(".root").obj({data:{name:"asd",age:123}})
     // NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
 </script>
 </body>

@@ -81,6 +81,7 @@ class Render {
                 } else {
                     node.nodeValue = value;
                 }
+                html = value;
             }
         }
         return node;
@@ -257,6 +258,7 @@ oRender.prototype = {
                 } else {
                     node.nodeValue = value;
                 }
+                html = value;
             }
         }
         return node;
