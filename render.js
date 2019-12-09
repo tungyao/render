@@ -103,7 +103,7 @@ class Render {
     setNode(node) {
         this.node = document.querySelectorAll(node);
         if (typeof this.node !== "object") {
-            this.node = document.getElementsByClassName(node.substr(1,node.length-1));
+            this.node = document.getElementsByClassName(node.substr(1, node.length - 1));
         }
         this.name = node;
         this._check();
@@ -186,7 +186,7 @@ class Render {
     }
 }
 
-// 旧版浏览器使用
+// 旧版浏览器使用 主要针对不兼容after的浏览器 把class删去
 var oRender = function oRender() {
 };
 oRender.prototype = {
@@ -279,7 +279,7 @@ oRender.prototype = {
     setNode: function (node) {
         this.node = document.querySelectorAll(node);
         if (typeof this.node !== "object") {
-            this.node = document.getElementsByClassName(node.substr(1,node.length-1));
+            this.node = document.getElementsByClassName(node.substr(1, node.length - 1));
         }
         this.name = node;
         this._check();
@@ -333,10 +333,20 @@ oRender.prototype = {
         }
         if (type === 0) {
             for (let j of data[dname]) {
-                nodes.after(this._findPrefix(node.cloneNode(true), j));
+                var parent = nodes.parentNode;
+                if (parent.lastChild === nodes) {
+                    parent.appendChild(this._findPrefix(node.cloneNode(true), j));
+                } else {
+                    parent.insertBefore(this._findPrefix(node.cloneNode(true), j), nodes.nextSibling)
+                }
             }
         } else if (type === 1) {
-            nodes.after(this._findPrefix(node.cloneNode(true), data[dname]));
+            var parent = nodes.parentNode;
+            if (parent.lastChild === nodes) {
+                parent.appendChild(this._findPrefix(node.cloneNode(true), data[dname]));
+            } else {
+                parent.insertBefore(this._findPrefix(node.cloneNode(true), data[dname]), nodes.nextSibling)
+            }
         }
         nodes.style.display = "none";
         nodes.attributes.setNamedItem(document.createAttribute("status"));
@@ -361,10 +371,9 @@ oRender.prototype = {
         return this;
     }
 };
-var OldRender = function (node) {
-    return new oRender().setNode(node);
+window.OldRender =function () {
+    return  new oRender();
 };
-
 function NewRender(node) {
     return new Render().setNode(node);
 }

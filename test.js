@@ -1,8 +1,8 @@
-// let arr = [];
-// for (let key = 0; key < 1000; key++) {
-//     arr.push({name: "a", age: key})
-// }
-// let nodea = NewRender().setNode(".father").for({data: arr});
+let arr = [];
+for (let key = 0; key < 1000; key++) {
+    arr.push({name: "a", age: key})
+}
+let nodea = OldRender().setNode(".root").for({data: arr});
 // // setTimeout(function () {
 // //     nodea.for({data: [{name: "aa", age: "bb"}, {name: "cc", age: "dd"}]});
 // // }, 1000);
