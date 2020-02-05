@@ -164,7 +164,7 @@ class Render {
     obj(data) {
         if (this.backNode !== null) {
             this.node[0].innerHTML = "";
-            this.backNode = this.backNodex;
+            this.backNode = this.backNodex.cloneNode(true);
             this._same(this.backNodex, data, 1)
         } else {
             this.backNode = this.node[0].cloneNode(true);

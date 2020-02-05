@@ -31,8 +31,8 @@
     Y.for({data: [{name: "a", age: "x"}, {name: "c", age: "d"}]});
 
     function test() {
-        X.obj({data: {name: "zxc", age: 576}});
-        Y.for({data: [{name: "aaa", age: "xxxx"}, {name: "cccc", age: "dddd"}]});
+        X.obj({data: {name: "zxc", age:Math.random()}});
+        Y.for({data: [{name: "aaa", age:Math.random()}, {name: "cccc", age: "dddd"}]});
     }
 
     // NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
