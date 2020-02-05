@@ -2,11 +2,12 @@
 class Render {
     constructor(node) {
         this.node = null;
-        this.name= null;
-        this.status= null;
+        this.name = null;
+        this.status = null;
         this.setNode(node);
         this.status = 0;
         this._prefix = 0;
+        this.backNode = null;
         this._node = document.createElement("div");
     }
 
@@ -51,12 +52,7 @@ class Render {
             }
         }
     }
-
-    _parseDom(node, data) {
-        let html = node.nodeValue;
-        if (node.nodeValue === null) {
-            html = node.innerHTML;
-        }
+    _change(html, nodex, data) {
         let a = 0;
         for (let j in html) {
             if (html[j] === "{") {
@@ -73,15 +69,23 @@ class Render {
                     key = data[d[1]];
                 }
                 let value = html.replace(ns, key);
-                if (node.nodeValue === null) {
-                    node.innerHTML = value;
+                if (nodex.nodeValue === null) {
+                    nodex.innerHTML = value;
                 } else {
-                    node.nodeValue = value;
+                    nodex.nodeValue = value;
                 }
-                html = value;
+                this._change(value,nodex,data);
             }
         }
-        return node;
+    }
+
+    _parseDom(nodex, data) {
+        let html = nodex.nodeValue;
+        if (nodex.nodeValue === null) {
+            html = nodex.innerHTML;
+        }
+        this._change(html, nodex, data);
+        return nodex;
     };
 
     _fff(object, key) {
@@ -133,47 +137,48 @@ class Render {
     }
 
     _same(nodes, data, type) {
-        let node = nodes;
         let dname;
         if (type === 0) {
             dname = nodes.attributes.getNamedItem("render-for").value;
         } else if (type === 1) {
             dname = nodes.attributes.getNamedItem("render-obj").value;
         }
-        if (node.style.display === "none") {
-            node.style.removeProperty("display");
-            // node.attributes.removeNamedItem("render-for");
-        }
-        let n = node.nextSibling;
-        while (n) {
-            let nn = n;
-            n = n.nextSibling;
-            nn.remove();
-        }
-        if (node.attributes.getNamedItem("status") && this.status !== 0) {
-            node.attributes.removeNamedItem("status");
-        }
         if (type === 0) {
+            this.node.innerHTML = "";
             for (let j of data[dname]) {
-                nodes.after(this._findPrefix(node.cloneNode(true), j));
+                // for(let k of this.backNode.childNodes){
+                //     console.log(this._parseDom(k.cloneNode(true), j));
+                //     // this.node.appendChild()
+                // }
+                let x = this._findPrefix(this.backNode.cloneNode(true), j);
+                for (let i of x.childNodes) {
+                    this.node.appendChild(i.cloneNode(true));
+                }
             }
         } else if (type === 1) {
-            nodes.after(this._findPrefix(node.cloneNode(true), data[dname]));
+            let x = this._findPrefix(this.backNode, data[dname]);
+            this.node[0].innerHTML = "";
+            for (let i of x.childNodes) {
+                this.node[0].appendChild(i.cloneNode(true));
+            }
         }
-        nodes.style.display = "none";
-        nodes.attributes.setNamedItem(document.createAttribute("status"));
     }
 
     obj(data) {
-        this._same(this.node[0], data, 1)
+        this.backNode = this.node[0].cloneNode(true);
+        for (let i of this.node[0].childNodes) {
+            i.remove();
+        }
+        this._same(this.backNode, data, 1)
     }
 
     for(data) {
-        for (let i of this.node) {
-            this._same(i, data, 0);
-        }
-        this.status += 1;
-        return this;
+        this.backNode = this.node[0].cloneNode(true);
+        // for (let i of this.node[0].childNodes) {
+        //     i.remove();
+        // }
+        this.node = this.node[0];
+        this._same(this.backNode, data, 0)
     }
 
     append(node) {
@@ -352,7 +357,8 @@ oRender.prototype = {
     },
 
     obj: function (data) {
-        this._same(this.node[0], data, 1)
+        let node = this.node[0];
+        let dname = nodes.attributes.getNamedItem("render-obj").value;
     },
 
     for: function (data) {
@@ -370,9 +376,11 @@ oRender.prototype = {
         return this;
     }
 };
-function OldRender (){
-    return  new oRender();
+
+function OldRender() {
+    return new oRender();
 }
+
 function NewRender(node) {
     return new Render().setNode(node);
 }

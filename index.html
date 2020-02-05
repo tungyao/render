@@ -10,23 +10,22 @@
 </head>
 <body>
 <div render-obj="data" class="root">
-    <div>
-
-        <div>
-            <div>
-                <div oncancel="{item.name}">
-                    {item.name}{item.age}
-                </div>
-            </div>
-        </div>
+    {item.name}
+    <div oncancel="{item.name}">
+        {item.age}{item.name}
     </div>
-
+</div>
+<div>
+    <h1>hello</h1>
+</div>
+<div render-for="data" class="array">
+    <h1>{item.age}{item.name}</h1>
 </div>
 <script src="test.js"></script>
-
 <script>
 
-    OldRender().setNode(".root").obj({data:{name:"asd",age:123}})
+    NewRender().setNode(".root").obj({data: {name: "asd", age: 123}})
+    NewRender(".array").for({data:[{name:"a",age:"x"},{name:"c",age:"d"}]});
     // NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
 </script>
 </body>
