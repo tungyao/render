@@ -52,6 +52,7 @@ class Render {
             }
         }
     }
+
     _change(html, nodex, data) {
         let a = 0;
         for (let j in html) {
@@ -74,7 +75,7 @@ class Render {
                 } else {
                     nodex.nodeValue = value;
                 }
-                this._change(value,nodex,data);
+                this._change(value, nodex, data);
             }
         }
     }
@@ -146,10 +147,6 @@ class Render {
         if (type === 0) {
             this.node.innerHTML = "";
             for (let j of data[dname]) {
-                // for(let k of this.backNode.childNodes){
-                //     console.log(this._parseDom(k.cloneNode(true), j));
-                //     // this.node.appendChild()
-                // }
                 let x = this._findPrefix(this.backNode.cloneNode(true), j);
                 for (let i of x.childNodes) {
                     this.node.appendChild(i.cloneNode(true));
@@ -165,20 +162,31 @@ class Render {
     }
 
     obj(data) {
-        this.backNode = this.node[0].cloneNode(true);
-        for (let i of this.node[0].childNodes) {
-            i.remove();
+        if (this.backNode !== null) {
+            this.node[0].innerHTML = "";
+            this.backNode = this.backNodex;
+            this._same(this.backNodex, data, 1)
+        } else {
+            this.backNode = this.node[0].cloneNode(true);
+            this.backNodex = this.node[0].cloneNode(true);
+            for (let i of this.node[0].childNodes) {
+                i.remove();
+            }
+            this._same(this.backNode, data, 1)
         }
-        this._same(this.backNode, data, 1)
+
     }
 
     for(data) {
-        this.backNode = this.node[0].cloneNode(true);
-        // for (let i of this.node[0].childNodes) {
-        //     i.remove();
-        // }
-        this.node = this.node[0];
-        this._same(this.backNode, data, 0)
+        if (this.backNode !== null) {
+            this.backNode = this.backNodex.cloneNode(true);
+            this._same(this.backNode, data, 0);
+        } else {
+            this.backNode = this.node[0].cloneNode(true);
+            this.backNodex = this.node[0].cloneNode(true);
+            this.node = this.node[0];
+            this._same(this.backNode, data, 0);
+        }
     }
 
     append(node) {

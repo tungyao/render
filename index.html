@@ -15,6 +15,7 @@
         {item.age}{item.name}
     </div>
 </div>
+<button onclick="test()">TEST</button>
 <div>
     <h1>hello</h1>
 </div>
@@ -24,8 +25,16 @@
 <script src="test.js"></script>
 <script>
 
-    NewRender().setNode(".root").obj({data: {name: "asd", age: 123}})
-    NewRender(".array").for({data:[{name:"a",age:"x"},{name:"c",age:"d"}]});
+    let X = NewRender().setNode(".root");
+    X.obj({data: {name: "asd", age: 123}});
+    let Y = NewRender(".array");
+    Y.for({data: [{name: "a", age: "x"}, {name: "c", age: "d"}]});
+
+    function test() {
+        X.obj({data: {name: "zxc", age: 576}});
+        Y.for({data: [{name: "aaa", age: "xxxx"}, {name: "cccc", age: "dddd"}]});
+    }
+
     // NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
 </script>
 </body>
