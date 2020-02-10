@@ -61,7 +61,7 @@ class Render {
             }
             if (html[j] === "}" && html[j + 1] === "}") {
                 let nss = html.substring(a, j + 2);
-                let ns = nss.substring(3, nss.length-2);
+                let ns = nss.substring(2, nss.length-2);
                 let d = ns.split(".");
                 let key;
                 if (d.length >= 2) {
