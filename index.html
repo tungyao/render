@@ -10,25 +10,32 @@
 </head>
 <body>
 <div render-obj="data" class="root">
-    {item.name}
-    <div oncancel="{item.name}">
-        {item.age}{item.name}
+    {{name}}
+    {{ak.yashua}}
+    <div>
+        {{age}} {{name}}
+        <pre>
+            func Name(){
+                println("hello world")
+            }
+
+        </pre>
     </div>
 </div>
-<button onclick="test()">TEST</button>
-<div>
-    <h1>hello</h1>
-</div>
-<div render-for="data" class="array">
-    <h1>{item.age}{item.name}</h1>
-</div>
+<!--<button onclick="test()">TEST</button>-->
+<!--<div>-->
+<!--    <h1>hello</h1>-->
+<!--</div>-->
+<!--<div render-for="data" class="array">-->
+<!--    <h1>{item.age}{item.name}</h1>-->
+<!--</div>-->
 <script src="test.js"></script>
 <script>
 
     let X = NewRender().setNode(".root");
-    X.obj({data: {name: "asd", age: 123}});
-    let Y = NewRender(".array");
-    Y.for({data: [{name: "a", age: "x"}, {name: "c", age: "d"}]});
+    X.obj({data: {name: "AAAA", age: 123,ak:{yashua:"xxxx"}}});
+    // let Y = NewRender(".array");
+    // Y.for({data: [{name: "a", age: "x"}, {name: "c", age: "d"}]});
 
     function test() {
         X.obj({data: {name: "zxc", age:Math.random()}});

@@ -55,21 +55,21 @@ class Render {
 
     _change(html, nodex, data) {
         let a = 0;
-        for (let j in html) {
-            if (html[j] === "{") {
-                a = j;
+        for (let j = 0; j < html.length; j++) {
+            if (html[j] === "{" && html[j + 1] === "{") {
+                a = j - 1;
             }
-            if (html[j] === "}") {
-                let ns = html.substr(a, j - a + 1);
-                let nss = html.substr(a, j - a);
-                let d = nss.split(".");
+            if (html[j] === "}" && html[j + 1] === "}") {
+                let nss = html.substring(a, j + 2);
+                let ns = nss.substring(3, nss.length-2);
+                let d = ns.split(".");
                 let key;
-                if (d.length > 2) {
-                    key = this._fff(data[d[1]], d.pop());
+                if (d.length >= 2) {
+                    key = this._fff(data[d[0]], d.pop());
                 } else {
-                    key = data[d[1]];
+                    key = data[d[0]];
                 }
-                let value = html.replace(ns, key);
+                let value = html.replace(nss, key);
                 if (nodex.nodeValue === null) {
                     nodex.innerHTML = value;
                 } else {
