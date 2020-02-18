@@ -11,32 +11,29 @@
 <body>
 <div render-obj="data" class="root">
     {{name}}
-    {{ak.yashua}}
     <div>
         {{age}} {{name}}
         <pre>
-            func Name(){
-                println("hello world")
-            }
-
+func Name(){
+    println("hello world")
+}
         </pre>
     </div>
 </div>
-<!--<button onclick="test()">TEST</button>-->
-<!--<div>-->
-<!--    <h1>hello</h1>-->
-<!--</div>-->
-<!--<div render-for="data" class="array">-->
-<!--    <h1>{item.age}{item.name}</h1>-->
-<!--</div>-->
+<div render-for="data" class="array">
+    <p>{{name}}</p>
+    <p>{{age}}</p>
+</div>
+
+<button onclick="test()">Change</button>
+
 <script src="test.js"></script>
 <script>
 
-    let X = NewRender().setNode(".root");
+    let X = new Render(".root");
     X.obj({data: {name: "AAAA", age: 123,ak:{yashua:"xxxx"}}});
-    // let Y = NewRender(".array");
-    // Y.for({data: [{name: "a", age: "x"}, {name: "c", age: "d"}]});
-
+    let Y =new Render(".array");
+    Y.for({data: [{name: "a", age: "x"}, {name: "c", age: "d"}]});
     function test() {
         X.obj({data: {name: "zxc", age:Math.random()}});
         Y.for({data: [{name: "aaa", age:Math.random()}, {name: "cccc", age: "dddd"}]});
