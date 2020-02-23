@@ -54,10 +54,10 @@ class Render {
     }
 
     _change(html, nodex, data) {
-        let a = 0;
+        let a = -1;
         for (let j = 0; j < html.length; j++) {
             if (html[j] === "{" && html[j + 1] === "{") {
-                a = j - 1;
+                a = j;
             }
             if (html[j] === "}" && html[j + 1] === "}") {
                 let nss = html.substring(a, j + 2);
@@ -72,6 +72,7 @@ class Render {
                 } else {
                     key = data[d[0]];
                 }
+                console.log(nss);
                 let value = html.replace(nss, key);
                 if (nodex.nodeValue === null) {
                     nodex.innerHTML = value;
