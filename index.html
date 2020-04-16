@@ -9,34 +9,26 @@
     <script src="render.js"></script>
 </head>
 <body>
-<div render-obj="data" class="root">
-    {{name}}
-    <div onclick="test({{age}})">
-        {{age}} {{name}}
-        <pre>
-func Name(){
-    println("hello world")
-}
-        </pre>
-    </div>
+<div class="root">
+    {{item.age > 100 ? 1 : 2 }}
 </div>
-<div render-for="data" class="array">
-    <p>{{name}}</p>
-    <p>{{age}}</p>
+<div class="array">
+    <p id="a{{key}}">{{item.name}} {{item.age}}</p>
 </div>
 
 <button onclick="test()">Change</button>
-
 <script src="test.js"></script>
-<script>
 
+<script>
     let X = new Render(".root");
-    X.obj({data: {name: "AAAA", age: 123,ak:{yashua:"xxxx"}}});
-    let Y =new Render(".array");
-    Y.for({data: [{name: "a", age: "x"}, {name: "c", age: "d"}]});
+    X.obj({name: "AAAA", age: 123, ak: {yashua: "xxxx"}});
+    let Y = new Render(".array");
+    // Y.for([{name: "a", age: "x"}, {name: "c", age: "d"}]);
+    Y.for(['a', 'b', 'c'])
+    //
     function test() {
-        X.obj({data: {name: "zxc", age:Math.random()}});
-        Y.for({data: [{name: "aaa", age:Math.random()}, {name: "cccc", age: "dddd"}]});
+        X.obj({name: "zxc", age: Math.random()});
+        Y.for([{name: "aaa", age: Math.random()}, {name: "cccc", age: "dddd"}]);
     }
 
     // NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})

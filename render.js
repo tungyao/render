@@ -1,4 +1,3 @@
-// 新版浏览器可以使用
 class Render {
     constructor(node) {
         this.node = null;
@@ -11,32 +10,32 @@ class Render {
         this._node = document.createElement("div");
     }
 
-    _findPrefix(node, data) {
+    _findPrefix(node, data, index = 0) {
         let c = node;
-        this._findAttr(c, data);
+        this._findAttr(c, data, index);
         for (let i of c.childNodes) {
-            this._findAttr(i, data);
+            this._findAttr(i, data, index);
             if (i.nodeType === 3) {
-                i = this._parseDom(i, data)
+                i = this._parseDom(i, data, index)
             }
             if (i.nodeType === 1) {
-                this._findChild(i.childNodes, data)
+                this._findChild(i.childNodes, data, index)
             }
         }
         return c
     }
 
-    _findAttr(node, data) {
+    _findAttr(node, data, index) {
         if (typeof node.attributes === "undefined") {
             return;
         }
         for (let i of node.attributes) {
-            this._parseDom(i, data)
+            this._parseDom(i, data, index)
         }
     }
 
-    _findChild(node, data) {
-        this._findAttr(node, data);
+    _findChild(node, data, index) {
+        this._findAttr(node, data, index);
         if (typeof node.length === "undefined") {
             if (typeof node === "object" && node.nodeType === 1) {
                 this._parseDom(node, data);
@@ -44,17 +43,23 @@ class Render {
             return;
         }
         for (let i of node) {
-            this._findAttr(i, data);
+            this._findAttr(i, data, index);
             if (i.nodeType === 3) {
-                this._parseDom(i, data)
+                this._parseDom(i, data, index)
             } else if (i.nodeType === 1) {
-                this._findChild(i.childNodes, data)
+                this._findChild(i.childNodes, data, index)
             }
         }
     }
 
-    _change(html, nodex, data) {
+    _change(html, nodex, item, index) {
         let a = -1;
+        html = html.replace("{{key}}", index);
+        if (nodex.nodeValue === null) {
+            nodex.innerHTML = html;
+        } else {
+            nodex.nodeValue = html;
+        }
         for (let j = 0; j < html.length; j++) {
             if (html[j] === "{" && html[j + 1] === "{") {
                 a = j;
@@ -65,31 +70,24 @@ class Render {
                 if (ns[0] === "{") {
                     ns = ns.substring(1, nss.length);
                 }
-                let d = ns.split(".");
-                let key;
-                if (d.length >= 2) {
-                    key = this._fff(data[d[0]], d.pop());
-                } else {
-                    key = data[d[0]];
-                }
-                console.log(nss);
+                let key = typeof item === "string" ? item : eval(ns);
                 let value = html.replace(nss, key);
                 if (nodex.nodeValue === null) {
                     nodex.innerHTML = value;
                 } else {
                     nodex.nodeValue = value;
                 }
-                this._change(value, nodex, data);
+                this._change(value, nodex, item, index);
             }
         }
     }
 
-    _parseDom(nodex, data) {
+    _parseDom(nodex, data, index) {
         let html = nodex.nodeValue;
         if (nodex.nodeValue === null) {
             html = nodex.innerHTML;
         }
-        this._change(html, nodex, data);
+        this._change(html, nodex, data, index);
         return nodex;
     };
 
@@ -116,47 +114,17 @@ class Render {
         return this;
     }
 
-    _check() {
-        for (let i of this.node) {
-            if (i.attributes.getNamedItem("render-if") !== null) {
-                if (i.attributes.getNamedItem("render-if").value === "false") {
-                    i.style.display = "none";
-                }
-            }
-        }
-    }
-
-    if(status) {
-        this.setNode(this.name);
-        for (let i of this.node) {
-            if (status) {
-                if (!i.attributes.getNamedItem("status")) {
-                    i.style.removeProperty("display")
-                }
-            } else {
-                i.style.display = "none";
-            }
-        }
-        return this;
-    }
-
     _same(nodes, data, type) {
-        let dname;
-        if (type === 0) {
-            dname = nodes.attributes.getNamedItem("render-for").value;
-        } else if (type === 1) {
-            dname = nodes.attributes.getNamedItem("render-obj").value;
-        }
         if (type === 0) {
             this.node.innerHTML = "";
-            for (let j of data[dname]) {
-                let x = this._findPrefix(this.backNode.cloneNode(true), j);
+            for (let j in data) {
+                let x = this._findPrefix(this.backNode.cloneNode(true), data[j], j);
                 for (let i of x.childNodes) {
                     this.node.appendChild(i.cloneNode(true));
                 }
             }
         } else if (type === 1) {
-            let x = this._findPrefix(this.backNode, data[dname]);
+            let x = this._findPrefix(this.backNode, data);
             this.node[0].innerHTML = "";
             for (let i of x.childNodes) {
                 this.node[0].appendChild(i.cloneNode(true));
@@ -198,8 +166,4 @@ class Render {
         }
         return this;
     }
-}
-
-function NewRender(node) {
-    return new Render(node);
 }
