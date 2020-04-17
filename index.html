@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="root">
-    {{this.append(item.name)}} <br>{{item.age}}
+    {{this.append(item.name)}} <br>{{item.age >100 ? "up":"down"}}
 </div>
 <div class="array">
     <p id="a{{key}}">{{item.name}} {{item.age > 1?0:2}}</p>
