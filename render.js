@@ -72,7 +72,10 @@ class Render {
                 }
                 let key = typeof item === "string" ? item : eval(ns);
                 if (typeof key === "object") {
-                    key=""
+                    nodex.innerHTML = "";
+                    nodex.nodeValue = "";
+                    nodex.parentNode.appendChild(key.childNodes[0]);
+                    continue;
                 }
                 let value = html.replace(nss, key);
                 if (nodex.nodeValue === null) {
@@ -168,10 +171,16 @@ class Render {
         }
     }
 
-    append(node) {
-        for (let i of this.node) {
-            i.innerHTML = node
+    html(node) {
+        if (this.node.length > 0) {
+            for (let i of this.node) {
+                i.innerHTML = node
+            }
+            return this.node
+        } else {
+            let d = document.createElement("div");
+            d.innerHTML = node;
+            return d;
         }
-        return this;
     }
 }
