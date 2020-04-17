@@ -10,21 +10,24 @@
 </head>
 <body>
 <div class="root">
-    {{item.age > 100 ? 1 : 2 }}
+    {{this.append(item.name)}} <br>{{item.age}}
 </div>
 <div class="array">
-    <p id="a{{key}}">{{item.name}} {{item.age}}</p>
+    <p id="a{{key}}">{{item.name}} {{item.age > 1?0:2}}</p>
 </div>
 
 <button onclick="test()">Change</button>
 <script src="test.js"></script>
 
 <script>
+    function add(a,b){
+        return a+b;
+    }
     let X = new Render(".root");
-    X.obj({name: "AAAA", age: 123, ak: {yashua: "xxxx"}});
-    let Y = new Render(".array");
+    X.obj({name: "<h1>hello</h1>", age: 123, ak: {yashua: "xxxx"}});
+    // let Y = new Render(".array");
     // Y.for([{name: "a", age: "x"}, {name: "c", age: "d"}]);
-    Y.for(['a', 'b', 'c'])
+    // Y.for(['a', 'b', 'c'])
     //
     function test() {
         X.obj({name: "zxc", age: Math.random()});

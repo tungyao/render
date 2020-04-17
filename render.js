@@ -16,7 +16,7 @@ class Render {
         for (let i of c.childNodes) {
             this._findAttr(i, data, index);
             if (i.nodeType === 3) {
-                i = this._parseDom(i, data, index)
+                this._parseDom(i, data, index)
             }
             if (i.nodeType === 1) {
                 this._findChild(i.childNodes, data, index)
@@ -71,6 +71,9 @@ class Render {
                     ns = ns.substring(1, nss.length);
                 }
                 let key = typeof item === "string" ? item : eval(ns);
+                if (typeof key === "object") {
+                    key=""
+                }
                 let value = html.replace(nss, key);
                 if (nodex.nodeValue === null) {
                     nodex.innerHTML = value;
@@ -78,6 +81,7 @@ class Render {
                     nodex.nodeValue = value;
                 }
                 this._change(value, nodex, item, index);
+                break;
             }
         }
     }
@@ -88,7 +92,6 @@ class Render {
             html = nodex.innerHTML;
         }
         this._change(html, nodex, data, index);
-        return nodex;
     };
 
     _fff(object, key) {
@@ -125,10 +128,15 @@ class Render {
             }
         } else if (type === 1) {
             let x = this._findPrefix(this.backNode, data);
-            this.node[0].innerHTML = "";
-            for (let i of x.childNodes) {
-                this.node[0].appendChild(i.cloneNode(true));
+            for (let i of this.node) {
+                for (let j of x.childNodes) {
+                    i.appendChild(j.cloneNode(true));
+                }
+                for (let k of x.attributes) {
+                    i.setAttribute(k.name, k.value);
+                }
             }
+
         }
     }
 
