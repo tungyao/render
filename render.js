@@ -1,4 +1,4 @@
-class Render {
+export default class Render {
     constructor(node) {
         this.node = null;
         this.name = null;
@@ -71,11 +71,13 @@ class Render {
                     ns = ns.substring(1, nss.length);
                 }
                 let key = typeof item === "string" ? item : eval(ns);
-                if (typeof key === "object") {
+                if (key.constructor === HTMLDivElement) {
                     nodex.innerHTML = "";
                     nodex.nodeValue = "";
-                    nodex.parentNode.appendChild(key.childNodes[0]);
-                    continue;
+                    for (let jk of key.childNodes) {
+                        nodex.parentNode.appendChild(jk.cloneNode(true));
+                    }
+                    break;
                 }
                 let value = html.replace(nss, key);
                 if (nodex.nodeValue === null) {
@@ -172,15 +174,9 @@ class Render {
     }
 
     html(node) {
-        if (this.node.length > 0) {
-            for (let i of this.node) {
-                i.innerHTML = node
-            }
-            return this.node
-        } else {
-            let d = document.createElement("div");
-            d.innerHTML = node;
-            return d;
-        }
+        let d = document.createElement("div");
+        d.innerHTML = node;
+        return d;
     }
 }
+window.Render = Render;
