@@ -43,6 +43,6 @@ let node = `<h1>HELLO RENDER</h1>`;
     * `{{item.age >22 ? "up" : "down"}}`
     * `{{add(item.age)}}`
 * use render html
-    * {{this.append(html_text)}}
+    * {{this.html(html_text)}}
 
 
