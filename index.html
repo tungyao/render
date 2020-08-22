@@ -26,12 +26,11 @@
     </article>
 </main>
 <button onclick="test()">Change</button>
-<script src="test.js"></script>
-
 <script>
-    function add(a,b){
-        return a+b;
+    function add(a, b) {
+        return a + b;
     }
+
     new Render(".content-main").for(JSON.parse(`[
   {
     "id": 1,
@@ -64,6 +63,19 @@
     }
 
     // NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
+</script>
+
+<div class="if_test">
+    {{if status === 1}}
+        <h1>123</h1>
+    {{/if}}
+</div>
+<script>
+    let arr = [1, 2, 3]
+    new Render(".if_test").data({
+        status: 1,
+        data: arr
+    });
 </script>
 </body>
 </html>
