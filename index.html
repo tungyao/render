@@ -10,72 +10,13 @@
 </head>
 <body>
 <div class="root">
-    {{html(item.name)}} <br>{{item.age >100 ? "up":"down"}}
+    <h1>{{item.age}}</h1>
 </div>
-<div class="array">
-    <p id="a{{key}}">{{item.name}} {{item.age > 1?0:2}}</p>
-</div>
-<main class="content-main">
-    <article class="content-main-list">
-        <h1>{{item.title}}</h1>
-        <p>{{item.author}}</p>
-        <hr>
-        <div>
-            {{this.html(item.body)}}
-        </div>
-    </article>
-</main>
 <button onclick="test()">Change</button>
 <script>
-    function add(a, b) {
-        return a + b;
-    }
 
-    new Render(".content-main").for(JSON.parse(`[
-  {
-    "id": 1,
-    "uid": 1,
-    "author": "tong",
-    "title": "Hello Edition Blog",
-    "body": "<h1>Hello<h1>",
-    "create_time": "2020-01-02 17:27:25",
-    "update_time": "2020-01-02 17:27:25"
-  },
-  {
-    "id": 2,
-    "uid": 2,
-    "author": "tongxxx",
-    "title": "Hello Edition Blog XXXX",
-    "body": "<h1>Hello XXXX<h1>",
-    "create_time": "2020-01-02 17:27:25",
-    "update_time": "2020-01-02 17:27:25"
-  }
-]`))
-    // let X = new Render(".root");
-    // X.obj({name: "<h1>hello</h1>", age: 123, ak: {yashua: "xxxx"}});
-    // let Y = new Render(".array");
-    // Y.for([{name: "a", age: "x"}, {name: "c", age: "d"}]);
-    // Y.for(['a', 'b', 'c'])
-    //
-    function test() {
-        X.obj({name: "zxc", age: Math.random()});
-        Y.for([{name: "aaa", age: Math.random()}, {name: "cccc", age: "dddd"}]);
-    }
-
-    // NewRender(".root").obj({data:{person:{name:"abc",age:123,data:{names:"wo ya shua"}},other:{name:"123213"}}})
-</script>
-
-<div class="if_test">
-    {{if status === 1}}
-        <h1>123</h1>
-    {{/if}}
-</div>
-<script>
-    let arr = [1, 2, 3]
-    new Render(".if_test").data({
-        status: 1,
-        data: arr
-    });
+    let X = new Render(".root");
+    X.obj({name: "<h1>hello</h1>", age: 123, ak: {yashua: "xxxx"}});
 </script>
 </body>
 </html>

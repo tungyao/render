@@ -1,4 +1,4 @@
-class Render {
+ class Render {
     constructor(node) {
         this.node = null;
         this.name = null;
@@ -134,6 +134,7 @@ class Render {
         } else if (type === 1) {
             let x = this._findPrefix(this.backNode, data);
             for (let i of this.node) {
+                i.innerHTML="";
                 for (let j of x.childNodes) {
                     i.appendChild(j.cloneNode(true));
                 }
@@ -173,38 +174,10 @@ class Render {
         }
     }
 
-    data(reflect) {
-        let node = this.node[0];
-        let all_html="";
-        for(let i of node.childNodes){
-            if(i.constructor===Text){
-                all_html+=i.textContent
-            }else{
-                all_html+=i.outerHTML;
-            }
-        }
-        // 巡查特定标签
-    }
-
     html(node) {
         let d = document.createElement("div");
         d.innerHTML = node;
         return d;
     }
-    show(){
-        for (let i of this.node){
-            i.style.display = "block";
-        }
-        this.setNode(this.name);
-        this.backNode=null;
-    }
-    hide(){
-        for (let i of this.node){
-            i.style.display = "none";
-        }
-        this.setNode(this.name);
-        this.backNode=null;
-    }
 }
-
 window.Render = Render;
